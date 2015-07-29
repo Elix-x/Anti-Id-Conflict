@@ -1,0 +1,16 @@
+[
+{
+  "modid": "antiidconflict",
+  "name": "Anti Id Conflict",
+  "description": "",
+  "version": "1.2.2",
+  "mcversion": "1.7.10",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["elix_x"],
+  "credits": "elix_x",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
