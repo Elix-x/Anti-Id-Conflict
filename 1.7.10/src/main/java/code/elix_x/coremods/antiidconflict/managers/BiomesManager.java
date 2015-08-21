@@ -16,9 +16,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-public class BiomesManager extends AntiIdConflictBase{
+public class BiomesManager {
 
-	public static int biomesLimit = 256;
 
 	public static String freeBiomeIDs = "";
 	public static String occupiedBiomeIDs = "";
@@ -36,11 +35,10 @@ public class BiomesManager extends AntiIdConflictBase{
 
 	public static void preinit(FMLPreInitializationEvent event) throws Exception
 	{ 
-		biomesFolder = new File(mainFolder, "\\biomes");
-		biomesFolder.mkdir();
+		AntiIdConflictBase.biomesFolder = new File(AntiIdConflictBase.mainFolder, "\\biomes");
+		AntiIdConflictBase.biomesFolder.mkdir();
 
 		setUpBiomesFolder();
-		//		conflicts = new ConflictingBiomes[biomesLimit];
 	}
 
 	public static void init(FMLInitializationEvent event)
@@ -57,37 +55,15 @@ public class BiomesManager extends AntiIdConflictBase{
 
 	public static void setUpBiomesFolder() throws Exception{
 		{
-			File conf = new File(biomesFolder,"\\limitation.cfg");	
-			conf.createNewFile();
-			Configuration config = new Configuration(conf);
-			config.load();
-			biomesLimit = config.getInt("limit", "limitation settings", 256, 256, Integer.MAX_VALUE, "!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\nWIP\nCRAHES 99.9%\nUSE AT YOUR OWN RISK\nMINECRAFT DEFAULT VALUE IS 256\n!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\n\nSet number to max amount of biomes you want.\n\n!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\nDo not abuse!\nHigher numbers will slow down computer!\nEven higher numbers will CRASH minecraft!\n!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
-			System.out.println("Succesfully set biomes limitation to: " + biomesLimit);
-			config.save();
-		}
-		{
-			File conf = new File(biomesFolder,"\\main.cfg");	
+			File conf = new File(AntiIdConflictBase.biomesFolder,"\\main.cfg");	
 			conf.createNewFile();
 			Configuration config = new Configuration(conf);
 			config.load();
 			crashIfConflict = config.getBoolean("crashIfConflict", "Settings of reaction to repeated ids", true, "If mod detects biome trying to ovverride old one, force Minecraft to crash.\nRecommendation: do not tuch, may lead to worlds problems");
 			ignoreRegistry = config.getBoolean("ignoreRegistry", "Settings of reaction to repeated ids", true, "If mod detects biome trying to ovverride old one, force Minecraft to crash EVEN IF BIOME ISN'T REGISTERED.\nRecommendation: do not tuch, may lead to many many many problems");
 			debug = config.getBoolean("debug", "Settings of console output", false, "Enable debugging messages in console");
-			//			overrideIDs = config.getBoolean("overrideIDs", "Settings of loading", false, "Ovverride biome's ids using biomesIDs.txt.\n\n!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\nMAY BE INCOMPATIBLE WITH SOME MODS\n!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 			config.save();
 		}	
-		/*{
-			File conf = new File(biomesFolder,"\\biomeIDs.cfg");	
-			BufferedReader bufferedreader = new BufferedReader(new FileReader(conf));
-            String s = "";
-
-            while ((s = bufferedreader.readLine()) != null)
-            {
-            	String[] nameID
-            }
-
-            bufferedreader.close();
-		}*/
 	}
 
 	public static void updateBiomesFolder() throws Exception{
@@ -125,7 +101,7 @@ public class BiomesManager extends AntiIdConflictBase{
 		System.out.println("Found tottally " + IconflictedIds + " conflicted biome ids");
 		
 		{
-			File freeIds = new File(biomesFolder, "\\avaibleIDs.txt");
+			File freeIds = new File(AntiIdConflictBase.biomesFolder, "\\avaibleIDs.txt");
 			if(freeIds.exists()){
 				freeIds.delete();
 			}
@@ -139,7 +115,7 @@ public class BiomesManager extends AntiIdConflictBase{
 			writer.close();
 		}
 		{
-			File occupiedIds = new File(biomesFolder, "\\occupiedIDs.txt");
+			File occupiedIds = new File(AntiIdConflictBase.biomesFolder, "\\occupiedIDs.txt");
 			if(occupiedIds.exists()){
 				occupiedIds.delete();
 			}
@@ -154,7 +130,7 @@ public class BiomesManager extends AntiIdConflictBase{
 			writer.close();
 		}
 		{
-			File file = new File(biomesFolder, "\\conflictedIDs.txt");
+			File file = new File(AntiIdConflictBase.biomesFolder, "\\conflictedIDs.txt");
 			if(file.exists()){
 				file.delete();
 			}
@@ -168,7 +144,7 @@ public class BiomesManager extends AntiIdConflictBase{
 			writer.close();
 		}
 		{
-			File all = new File(biomesFolder, "\\AllIDs.txt");
+			File all = new File(AntiIdConflictBase.biomesFolder, "\\AllIDs.txt");
 			PrintWriter writer = new PrintWriter(all);
 			writer.println("Total amount of free biome ids: " + freeIds);
 			writer.println("Total amount of occupied biome ids: " + BiomesManager.occupiedIds);
@@ -188,12 +164,7 @@ public class BiomesManager extends AntiIdConflictBase{
 		}
 	}
 
-	public static int getLimitation() {
-		return biomesLimit;
-	}
-
 	public static int getBiomeID(int id, boolean register) {
-		//		System.out.println("registering biome with id: " + id + " needs registration: " + register);
 		if(!register && ignoreRegistry){
 			return id;
 		}
@@ -233,7 +204,6 @@ public class BiomesManager extends AntiIdConflictBase{
 					if(debug){
 						System.out.println(report);
 					}
-//					throw new BiomesIDConflictException(report);
 					CrashReport crash = new CrashReport("Conflicting biomes forced game to crash: ", new BiomesIDConflictException(report));
 					Minecraft.getMinecraft().crashed(crash);
 				}
@@ -260,12 +230,6 @@ public class BiomesManager extends AntiIdConflictBase{
 				biomes = ArrayUtils.add(biomes, BiomeGenBase.getBiomeGenArray()[ID]);
 			}
 		}
-
-		/*public void crashIfNeeded(){
-			if(crashIfConflict){
-				CrashReport report = new CrashReport("Conflict in biome ID's caused game to fail", new BiomesConflictException(ID, firstBiome, secondBiome));
-			}
-		}*/
 
 		public String getCrashMessage(){
 			String s = "";

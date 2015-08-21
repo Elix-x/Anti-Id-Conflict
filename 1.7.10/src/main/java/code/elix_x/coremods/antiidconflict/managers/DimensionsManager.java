@@ -15,7 +15,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
-public class DimensionsManager extends AntiIdConflictBase{
+public class DimensionsManager {
 	
 	public static String avaibleIDs = "";
 	public static String occupiedIDs = "";
@@ -26,8 +26,8 @@ public class DimensionsManager extends AntiIdConflictBase{
 	
 	public static void preinit(FMLPreInitializationEvent event) throws Exception
 	{ 
-		dimensionsFolder = new File(mainFolder, "\\dimensions");
-		dimensionsFolder.mkdir();
+		AntiIdConflictBase.dimensionsFolder = new File(AntiIdConflictBase.mainFolder, "\\dimensions");
+		AntiIdConflictBase.dimensionsFolder.mkdir();
 		
 		setUpDimensionsFolder();
 	}
@@ -43,7 +43,7 @@ public class DimensionsManager extends AntiIdConflictBase{
 	}
 	
 	public static void setUpDimensionsFolder() throws Exception {
-		File conf = new File(dimensionsFolder, "\\main.cfg");
+		File conf = new File(AntiIdConflictBase.dimensionsFolder, "\\main.cfg");
 		conf.createNewFile();
 		Configuration config = new Configuration(conf);
 		config.load();
@@ -54,14 +54,6 @@ public class DimensionsManager extends AntiIdConflictBase{
 
 	public static void updateDimensionsFolder() throws Exception {
 		{
-			/*for(int i = 0; i < Enchantment.enchantmentsList.length; i++){
-				Enchantment e = Enchantment.enchantmentsList[i];
-				if(e != null){
-					occupiedIDs += i + " : " + (translate ? I18n.format(e.getName()) : e.getName()) + " (" + e.getClass().getName() + ")\n";
-				} else {
-					avaibleIDs += i + "\n";
-				}
-			}*/
 			Hashtable<Integer, Class<? extends WorldProvider>> providers = ReflectionHelper.getPrivateValue(DimensionManager.class, null, "providers");
 			for(int i = lowerLimit; i <= upperLimit; i++){
 				if(DimensionManager.isDimensionRegistered(i)){
@@ -85,7 +77,7 @@ public class DimensionsManager extends AntiIdConflictBase{
 			}
 		}
 		{
-			File freeIds = new File(dimensionsFolder, "\\avaibleIDs.txt");
+			File freeIds = new File(AntiIdConflictBase.dimensionsFolder, "\\avaibleIDs.txt");
 			if(freeIds.exists()){
 				freeIds.delete();
 			}
@@ -98,7 +90,7 @@ public class DimensionsManager extends AntiIdConflictBase{
 			writer.close();
 		}
 		{
-			File occupiedIds = new File(dimensionsFolder, "\\occupiedIDs.txt");
+			File occupiedIds = new File(AntiIdConflictBase.dimensionsFolder, "\\occupiedIDs.txt");
 			if(occupiedIds.exists()){
 				occupiedIds.delete();
 			}
@@ -110,30 +102,13 @@ public class DimensionsManager extends AntiIdConflictBase{
 			}
 			writer.close();
 		}
-		/*{
-			File file = new File(biomesFolder, "\\conflictedIDs.txt");
-			if(file.exists()){
-				file.delete();
-			}
-			file.createNewFile();
-			PrintWriter writer = new PrintWriter(file);
-			writer.println("IDs in conflict:\n");
-			writer.println(conflictedIDs);
-			writer.close();
-		}*/
 		{
-			File all = new File(dimensionsFolder, "\\AllIDs.txt");
+			File all = new File(AntiIdConflictBase.dimensionsFolder, "\\AllIDs.txt");
 			PrintWriter writer = new PrintWriter(all);
 
 			Hashtable<Integer, Class<? extends WorldProvider>> providers = ReflectionHelper.getPrivateValue(DimensionManager.class, null, "providers");
 			
 			for(int i = lowerLimit; i <= upperLimit; i++){
-				/*Enchantment e = Enchantment.enchantmentsList[i];
-				if(e != null){
-					writer.println(i + " : " + (translate ? I18n.format(e.getName()) : e.getName()) + " (" + e.getClass().getName() + ")");
-				} else {
-					writer.println(i + " is Avaible");
-				}*/
 				if(DimensionManager.isDimensionRegistered(i)){
 					try{
 						writer.println(i + " is Occupied by: " + DimensionManager.getProvider(i).getDimensionName() + ", Provider: (id: " + DimensionManager.getProviderType(i) + ", class: " + DimensionManager.getProvider(i).getClass() + ")");

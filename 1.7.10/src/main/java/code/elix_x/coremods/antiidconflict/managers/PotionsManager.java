@@ -16,9 +16,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-public class PotionsManager extends AntiIdConflictBase{
-
-	public static int potionsLimit = 32;
+public class PotionsManager {
 
 	public static String freePotionIDs = "";
 	public static String occupiedPotionIDs = "";
@@ -37,11 +35,10 @@ public class PotionsManager extends AntiIdConflictBase{
 
 	public static void preinit(FMLPreInitializationEvent event) throws Exception
 	{ 
-		potionsFolder = new File(mainFolder, "\\potions");
-		potionsFolder.mkdir();
+		AntiIdConflictBase.potionsFolder = new File(AntiIdConflictBase.mainFolder, "\\potions");
+		AntiIdConflictBase.potionsFolder.mkdir();
 
 		setUpPotionFolder();
-		//		conflicts = new ConflictingBiomes[biomesLimit];
 	}
 
 	public static void init(FMLInitializationEvent event)
@@ -58,22 +55,12 @@ public class PotionsManager extends AntiIdConflictBase{
 
 	public static void setUpPotionFolder() throws Exception{
 		{
-			File conf = new File(potionsFolder,"\\limitation.cfg");	
-			conf.createNewFile();
-			Configuration config = new Configuration(conf);
-			config.load();
-			potionsLimit = config.getInt("limit", "limitation settings", 32, 32, Integer.MAX_VALUE, "!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\nWIP\nCRAHES 99.9%\nUSE AT YOUR OWN RISK\nMINECRAFT DEFAULT VALUE IS 32\n!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\n\nSet number to max amount of potions you want.\n\n!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\nDo not abuse!\nHigher numbers will slow down computer!\nEven higher numbers will CRASH minecraft!\n!!!!!!!!!!!!!!!!!!!!!!!!!ATTENTION!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
-			System.out.println("Succesfully set biomes limitation to: " + potionsLimit);
-			config.save();
-		}
-		{
-			File conf = new File(potionsFolder,"\\main.cfg");	
+			File conf = new File(AntiIdConflictBase.potionsFolder,"\\main.cfg");	
 			conf.createNewFile();
 			Configuration config = new Configuration(conf);
 			config.load();
 			crashIfConflict = config.getBoolean("crashIfConflict", "Settings of reaction to repeated ids", true, "If mod detects potion trying to override old one, force Minecraft to crash.\nRecommendation: do not tuch, may lead to worlds problems");
 			debug = config.getBoolean("debug", "Settings of console output", false, "Enable debugging messages in console");
-//			translate = config.getBoolean("translate", "translation", false, "Translate potions names in statistics");
 			config.save();
 		}	
 	}
@@ -110,7 +97,7 @@ public class PotionsManager extends AntiIdConflictBase{
 		}
 
 		{
-			File freeIds = new File(potionsFolder, "\\avaibleIDs.txt");
+			File freeIds = new File(AntiIdConflictBase.potionsFolder, "\\avaibleIDs.txt");
 			if(freeIds.exists()){
 				freeIds.delete();
 			}
@@ -126,7 +113,7 @@ public class PotionsManager extends AntiIdConflictBase{
 		{
 			int i = occupiedIds;
 
-			File occupiedIds = new File(potionsFolder, "\\occupiedIDs.txt");
+			File occupiedIds = new File(AntiIdConflictBase.potionsFolder, "\\occupiedIDs.txt");
 			if(occupiedIds.exists()){
 				occupiedIds.delete();
 			}
@@ -141,7 +128,7 @@ public class PotionsManager extends AntiIdConflictBase{
 			writer.close();
 		}
 		{
-			File file = new File(potionsFolder, "\\conflictedIDs.txt");
+			File file = new File(AntiIdConflictBase.potionsFolder, "\\conflictedIDs.txt");
 			if(file.exists()){
 				file.delete();
 			}
@@ -157,7 +144,7 @@ public class PotionsManager extends AntiIdConflictBase{
 		{
 			int j = occupiedIds;
 
-			File all = new File(potionsFolder, "\\AllIDs.txt");
+			File all = new File(AntiIdConflictBase.potionsFolder, "\\AllIDs.txt");
 			PrintWriter writer = new PrintWriter(all);
 			writer.println("Total amount of free potion ids: " + freeIds);
 			writer.println("Total amount of occupied potion ids: " + j);
@@ -187,10 +174,6 @@ public class PotionsManager extends AntiIdConflictBase{
 
 			writer.close();
 		}
-	}
-
-	public static int getLimitation() {
-		return potionsLimit;
 	}
 
 	public static int getPotionID(int id) {
@@ -230,7 +213,6 @@ public class PotionsManager extends AntiIdConflictBase{
 					if(debug){
 						System.out.println(report);
 					}
-					//					throw new BiomesIDConflictException(report);
 					CrashReport crash = new CrashReport("Conflicting potions forced game to crash: ", new PotionsIDConflictException(report));
 					Minecraft.getMinecraft().crashed(crash);
 				}
@@ -240,7 +222,7 @@ public class PotionsManager extends AntiIdConflictBase{
 
 	public static class ConflictingPotions{
 
-		public Potion[] potions = new Potion[potionsLimit];
+		public Potion[] potions = new Potion[Potion.potionTypes.length];
 
 		public int ID;
 
@@ -254,12 +236,6 @@ public class PotionsManager extends AntiIdConflictBase{
 				potions = ArrayUtils.add(potions, Potion.potionTypes[ID]);
 			}
 		}
-
-		/*public void crashIfNeeded(){
-			if(crashIfConflict){
-				CrashReport report = new CrashReport("Conflict in biome ID's caused game to fail", new BiomesConflictException(ID, firstBiome, secondBiome));
-			}
-		}*/
 
 		public String getCrashMessage(){
 			String s = "";

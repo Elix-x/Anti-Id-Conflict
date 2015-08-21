@@ -17,7 +17,6 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 public final class AntiIdConflictCore implements IFMLLoadingPlugin{
 
 	public static final String Transformer = AntiIdConflictTransformer.class.getName();
-//	public static final String Transformer = "code.elix_x.coremods.antiidconflict.AntiIdConflictTransformer";
 	
 	public static final String[] transformers = new String[]{Transformer};
 	
@@ -25,13 +24,11 @@ public final class AntiIdConflictCore implements IFMLLoadingPlugin{
 	
 	@Override
 	public String[] getASMTransformerClass() {
-//		return new String[]{};
 		return transformers;
 	}
 
 	@Override
 	public String getModContainerClass() {
-//		return "code.elix_x.coremods.antiidconflict.AntiIdConflictBase";
 		return null;
 	}
 

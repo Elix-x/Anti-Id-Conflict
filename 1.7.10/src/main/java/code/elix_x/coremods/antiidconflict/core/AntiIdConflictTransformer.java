@@ -19,17 +19,6 @@ import org.objectweb.asm.tree.VarInsnNode;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 public class AntiIdConflictTransformer implements IClassTransformer{
-
-
-	/*
-	 * Methods to patch:
-	 * BiomeGenBase: 
-	 * clinit
-	 * init
-	 * 
-	 * GETSTATIC net/minecraft/init/Blocks.grass : Lnet/minecraft/block/BlockGrass;
-	 * 
-	 */
 	
 	public static final Logger logger = LogManager.getLogger("AIC Core");
 
@@ -100,7 +89,6 @@ public class AntiIdConflictTransformer implements IClassTransformer{
 	}
 
 	private byte[] patchBiomeGenBase(String className, byte[] bytes) {
-		String clinit = "<clinit>";
 		String init = "<init>";
 
 		ClassNode classNode = new ClassNode();
@@ -111,45 +99,6 @@ public class AntiIdConflictTransformer implements IClassTransformer{
 
 		while(methods.hasNext()){
 			MethodNode method = methods.next();
-			if(method.name.equals(clinit)){
-				try{
-					logger.info("**************************************************");
-					logger.info("Patching <clinit>");
-
-					AbstractInsnNode currentNode = null;
-					AbstractInsnNode targetNode = null;
-					int place = -1;
-					int index = -1;
-
-					Iterator<AbstractInsnNode> iter = method.instructions.iterator();
-
-					while (iter.hasNext())
-					{
-						index++;
-						currentNode = iter.next();
-
-						if(currentNode.getOpcode() == Opcodes.SIPUSH){
-							IntInsnNode in = (IntInsnNode) currentNode;
-							if(in.operand == 256){
-								targetNode = currentNode;
-								place = index;
-								break;
-							}
-						}
-					}
-
-					//				m.instructions.insert(targetNode, new InsnNode(Opcodes.ICONST_0));
-					//				m.instructions.insert(targetNode, new IntInsnNode(Opcodes.SIPUSH, biomesLimit));
-					//INVOKESPECIAL code/elix_x/coremods/antiidconflict/AntiIdConflictBase.getLimitation ()I
-					method.instructions.insert(targetNode, new MethodInsnNode(Opcodes.INVOKESTATIC, "code/elix_x/coremods/antiidconflict/core/AsmHooks", "getLimitation", "()I"));
-					method.instructions.remove(targetNode);
-
-					logger.info("Patching <clinit> completed");
-					logger.info("**************************************************");
-				} catch(Exception e){
-					logger.error("Patching <clinit> failed with exception: ", e);
-				}
-			}
 			if(method.name.equals(init) && method.desc.equals("(IZ)V")){
 				try{
 					logger.info("**************************************************");
@@ -161,7 +110,6 @@ public class AntiIdConflictTransformer implements IClassTransformer{
 					int index = -1;
 
 					Iterator<AbstractInsnNode> iter = method.instructions.iterator();
-//					System.out.println(AntiIdConflictTranslator.getMapedClassName("world.biome.BiomeGenBase").replace(".", "/"));
 					while (iter.hasNext())
 					{
 						index++;
@@ -169,7 +117,6 @@ public class AntiIdConflictTransformer implements IClassTransformer{
 
 						if(currentNode.getOpcode() == Opcodes.PUTFIELD){
 							FieldInsnNode field = (FieldInsnNode) currentNode;
-//							System.out.println(field.owner);
 							if(field.owner.equals(AntiIdConflictTranslator.getMapedClassName("world.biome.BiomeGenBase").replace(".", "/")) && field.name.equals(AntiIdConflictTranslator.getMapedFieldName("BiomeGenBase", "field_76756_M", "biomeID"))){
 								targetNode = currentNode;
 								place = index;
@@ -178,17 +125,6 @@ public class AntiIdConflictTransformer implements IClassTransformer{
 						}
 					}
 
-					/*
-					 * ALOAD 0
-					 * ILOAD 1
-					 * PUTFIELD net/minecraft/world/biome/BiomeGenBase.biomeID : I
-					 * 
-					 *  ALOAD 0
-					 *  ILOAD 1
-					 *  ILOAD 2
-					 *  INVOKESTATIC code/elix_x/coremods/antiidconflict/AntiIdConflictBase.getBiomeID (IZ)I
-					 *  PUTFIELD code/elix_x/coremods/antiidconflict/AntiIdConflictBase.biomeID : I 
-					 */
 					method.instructions.insertBefore(targetNode, createNewListAndFillWith(new VarInsnNode(Opcodes.ILOAD, 2), new MethodInsnNode(Opcodes.INVOKESTATIC, "code/elix_x/coremods/antiidconflict/core/AsmHooks", "getBiomeID", "(IZ)I")));
 
 					logger.info("Patching <init> completed");

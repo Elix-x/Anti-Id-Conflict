@@ -14,7 +14,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-public class EntitiesManager extends AntiIdConflictBase{
+public class EntitiesManager {
 
 	public static int idToCheckUntil = 2048;
 	
@@ -24,8 +24,8 @@ public class EntitiesManager extends AntiIdConflictBase{
 	
 	public static void preinit(FMLPreInitializationEvent event) throws Exception
 	{ 
-		entitiesFolder = new File(mainFolder, "\\entities");
-		entitiesFolder.mkdir();
+		AntiIdConflictBase.entitiesFolder = new File(AntiIdConflictBase.mainFolder, "\\entities");
+		AntiIdConflictBase.entitiesFolder.mkdir();
 		
 		setUpEntitiesFolder();
 	}
@@ -41,7 +41,7 @@ public class EntitiesManager extends AntiIdConflictBase{
 	}
 	
 	public static void setUpEntitiesFolder() throws Exception {
-		File conf = new File(entitiesFolder, "\\main.cfg");
+		File conf = new File(AntiIdConflictBase.entitiesFolder, "\\main.cfg");
 		conf.createNewFile();
 		Configuration config = new Configuration(conf);
 		config.load();
@@ -61,7 +61,7 @@ public class EntitiesManager extends AntiIdConflictBase{
 			}
 		}
 		{
-			File freeIds = new File(entitiesFolder, "\\avaibleIDs.txt");
+			File freeIds = new File(AntiIdConflictBase.entitiesFolder, "\\avaibleIDs.txt");
 			if(freeIds.exists()){
 				freeIds.delete();
 			}
@@ -74,7 +74,7 @@ public class EntitiesManager extends AntiIdConflictBase{
 			writer.close();
 		}
 		{
-			File occupiedIds = new File(entitiesFolder, "\\occupiedIDs.txt");
+			File occupiedIds = new File(AntiIdConflictBase.entitiesFolder, "\\occupiedIDs.txt");
 			if(occupiedIds.exists()){
 				occupiedIds.delete();
 			}
@@ -86,29 +86,11 @@ public class EntitiesManager extends AntiIdConflictBase{
 			}
 			writer.close();
 		}
-		/*{
-			File file = new File(biomesFolder, "\\conflictedIDs.txt");
-			if(file.exists()){
-				file.delete();
-			}
-			file.createNewFile();
-			PrintWriter writer = new PrintWriter(file);
-			writer.println("IDs in conflict:\n");
-			writer.println(conflictedIDs);
-			writer.close();
-		}*/
 		{
-			File all = new File(entitiesFolder, "\\AllIDs.txt");
+			File all = new File(AntiIdConflictBase.entitiesFolder, "\\AllIDs.txt");
 			PrintWriter writer = new PrintWriter(all);
 
 			for(int i = 0; i < idToCheckUntil + 1; i++){
-				/*if(conflicts[i] != null){
-					writer.println(conflicts[i].getCrashMessage());
-				} else if(BiomeGenBase.getBiomeGenArray()[i] != null){
-					writer.println(i + " is Occupied by " + BiomeGenBase.getBiomeGenArray()[i].biomeName);
-				} else {
-					writer.println(i + " is Avaible");
-				}*/
 				Class clas = EntityList.getClassFromID(i);
 				if(clas != null){
 					writer.println(i + " is Occupied by " + EntityList.getStringFromID(i) + "(" + clas.getName() + ")");

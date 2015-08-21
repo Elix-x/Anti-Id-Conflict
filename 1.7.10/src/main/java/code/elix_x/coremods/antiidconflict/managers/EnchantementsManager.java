@@ -10,7 +10,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-public class EnchantementsManager extends AntiIdConflictBase{
+public class EnchantementsManager {
 	
 	public static boolean translate = false;
 	
@@ -20,8 +20,8 @@ public class EnchantementsManager extends AntiIdConflictBase{
 	
 	public static void preinit(FMLPreInitializationEvent event) throws Exception
 	{ 
-		enchantementsFolder = new File(mainFolder, "\\enchantements");
-		enchantementsFolder.mkdir();
+		AntiIdConflictBase.enchantementsFolder = new File(AntiIdConflictBase.mainFolder, "\\enchantements");
+		AntiIdConflictBase.enchantementsFolder.mkdir();
 		
 		setUpEnchantementsFolder();
 	}
@@ -37,7 +37,7 @@ public class EnchantementsManager extends AntiIdConflictBase{
 	}
 	
 	public static void setUpEnchantementsFolder() throws Exception {
-		File conf = new File(enchantementsFolder, "\\main.cfg");
+		File conf = new File(AntiIdConflictBase.enchantementsFolder, "\\main.cfg");
 		conf.createNewFile();
 		Configuration config = new Configuration(conf);
 		config.load();
@@ -57,7 +57,7 @@ public class EnchantementsManager extends AntiIdConflictBase{
 			}
 		}
 		{
-			File freeIds = new File(enchantementsFolder, "\\avaibleIDs.txt");
+			File freeIds = new File(AntiIdConflictBase.enchantementsFolder, "\\avaibleIDs.txt");
 			if(freeIds.exists()){
 				freeIds.delete();
 			}
@@ -70,7 +70,7 @@ public class EnchantementsManager extends AntiIdConflictBase{
 			writer.close();
 		}
 		{
-			File occupiedIds = new File(enchantementsFolder, "\\occupiedIDs.txt");
+			File occupiedIds = new File(AntiIdConflictBase.enchantementsFolder, "\\occupiedIDs.txt");
 			if(occupiedIds.exists()){
 				occupiedIds.delete();
 			}
@@ -82,19 +82,8 @@ public class EnchantementsManager extends AntiIdConflictBase{
 			}
 			writer.close();
 		}
-		/*{
-			File file = new File(biomesFolder, "\\conflictedIDs.txt");
-			if(file.exists()){
-				file.delete();
-			}
-			file.createNewFile();
-			PrintWriter writer = new PrintWriter(file);
-			writer.println("IDs in conflict:\n");
-			writer.println(conflictedIDs);
-			writer.close();
-		}*/
 		{
-			File all = new File(enchantementsFolder, "\\AllIDs.txt");
+			File all = new File(AntiIdConflictBase.enchantementsFolder, "\\AllIDs.txt");
 			PrintWriter writer = new PrintWriter(all);
 
 			for(int i = 0; i < Enchantment.enchantmentsList.length; i++){
