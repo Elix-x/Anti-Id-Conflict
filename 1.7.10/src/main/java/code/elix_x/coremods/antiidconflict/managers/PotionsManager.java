@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.potion.Potion;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -232,7 +233,12 @@ public class PotionsManager {
 		}
 
 		public void updateArray(){
-			if(!ArrayUtils.contains(potions, Potion.potionTypes[ID])){
+			Potion biome = Potion.potionTypes[ID];
+			boolean p = ArrayUtils.contains(potions, biome);
+			for(Potion b : potions){
+				p |= (b.equals(biome) || (b.getName().equals(biome.getName()) && b.getClass().getName().equals(biome.getClass().getName())));
+			}
+			if(!p){
 				potions = ArrayUtils.add(potions, Potion.potionTypes[ID]);
 			}
 		}

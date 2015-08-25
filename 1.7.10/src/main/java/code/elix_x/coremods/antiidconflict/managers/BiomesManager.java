@@ -226,7 +226,12 @@ public class BiomesManager {
 		}
 
 		public void updateArray(){
-			if(!ArrayUtils.contains(biomes, BiomeGenBase.getBiomeGenArray()[ID])){
+			BiomeGenBase biome = BiomeGenBase.getBiomeGenArray()[ID];
+			boolean p = ArrayUtils.contains(biomes, biome);
+			for(BiomeGenBase b : biomes){
+				p |= (b.equals(biome) || (b.biomeName.equals(biome.biomeName) && b.getClass().getName().equals(biome.getClass().getName())));
+			}
+			if(!p){
 				biomes = ArrayUtils.add(biomes, BiomeGenBase.getBiomeGenArray()[ID]);
 			}
 		}
