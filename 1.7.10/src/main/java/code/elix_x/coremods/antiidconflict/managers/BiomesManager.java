@@ -222,7 +222,7 @@ public class BiomesManager {
 
 		public ConflictingBiomes(int id, BiomeGenBase biome){
 			ID = id;
-			biomes[1] = biome;
+			biomes[0] = biome;
 		}
 
 		public void updateArray(){

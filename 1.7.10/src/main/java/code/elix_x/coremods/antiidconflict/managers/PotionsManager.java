@@ -229,7 +229,7 @@ public class PotionsManager {
 
 		public ConflictingPotions(int id, Potion potion){
 			ID = id;
-			potions[1] = potion;
+			potions[0] = potion;
 		}
 
 		public void updateArray(){
