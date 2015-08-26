@@ -28,7 +28,7 @@ public class BiomesManager {
 	public static int freeIds = 0;
 	public static int occupiedIds = 0;
 	public static int IconflictedIds = 0;
-	
+
 	public static ConflictingBiomes[] conflicts = new ConflictingBiomes[256];
 
 	public static void preinit(FMLPreInitializationEvent event) throws Exception
@@ -74,7 +74,7 @@ public class BiomesManager {
 			}
 		}
 		System.out.println("Found tottally " + freeIds + " free biome ids");
-		
+
 		{
 			for(BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()){
 				if(biome != null){
@@ -84,7 +84,7 @@ public class BiomesManager {
 			}
 		}
 		System.out.println("Found tottally " + occupiedIds + " occupied biome ids");
-		
+
 		{
 			for(ConflictingBiomes conflict : conflicts){
 				if(conflict != null){
@@ -97,7 +97,7 @@ public class BiomesManager {
 			}
 		}
 		System.out.println("Found tottally " + IconflictedIds + " conflicted biome ids");
-		
+
 		{
 			File freeIds = new File(AntiIdConflictBase.biomesFolder, "\\avaibleIDs.txt");
 			if(freeIds.exists()){
@@ -225,12 +225,14 @@ public class BiomesManager {
 
 		public void updateArray(){
 			BiomeGenBase biome = BiomeGenBase.getBiomeGenArray()[ID];
-			boolean p = ArrayUtils.contains(biomes, biome);
-			for(BiomeGenBase b : biomes){
-				p |= (b.equals(biome) || (b.biomeName.equals(biome.biomeName) && b.getClass().getName().equals(biome.getClass().getName())));
-			}
-			if(!p){
-				biomes = ArrayUtils.add(biomes, BiomeGenBase.getBiomeGenArray()[ID]);
+			if(biome != null){
+				boolean p = ArrayUtils.contains(biomes, biome);
+				for(BiomeGenBase b : biomes){
+					p |= (b.equals(biome) || (b.biomeName.equals(biome.biomeName) && b.getClass().getName().equals(biome.getClass().getName())));
+				}
+				if(!p){
+					biomes = ArrayUtils.add(biomes, BiomeGenBase.getBiomeGenArray()[ID]);
+				}
 			}
 		}
 

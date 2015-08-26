@@ -231,13 +231,15 @@ public class PotionsManager {
 		}
 
 		public void updateArray(){
-			Potion biome = Potion.potionTypes[ID];
-			boolean p = ArrayUtils.contains(potions, biome);
-			for(Potion b : potions){
-				p |= (b.equals(biome) || (b.getName().equals(biome.getName()) && b.getClass().getName().equals(biome.getClass().getName())));
-			}
-			if(!p){
-				potions = ArrayUtils.add(potions, Potion.potionTypes[ID]);
+			Potion potion = Potion.potionTypes[ID];
+			if(potion != null){
+				boolean p = ArrayUtils.contains(potions, potion);
+				for(Potion b : potions){
+					p |= (b.equals(potion) || (b.getName().equals(potion.getName()) && b.getClass().getName().equals(potion.getClass().getName())));
+				}
+				if(!p){
+					potions = ArrayUtils.add(potions, Potion.potionTypes[ID]);
+				}
 			}
 		}
 

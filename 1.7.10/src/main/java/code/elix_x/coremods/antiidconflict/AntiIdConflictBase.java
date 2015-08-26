@@ -28,7 +28,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-@Mod(modid = "antiidconflict", name = "Anti Id Conflict", version = "1.3.1")
+@Mod(modid = "antiidconflict", name = "Anti Id Conflict", version = "1.3.2")
 public class AntiIdConflictBase {
 
 	public static File mainFolder;
