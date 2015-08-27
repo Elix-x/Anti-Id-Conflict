@@ -228,7 +228,9 @@ public class BiomesManager {
 			if(biome != null){
 				boolean p = ArrayUtils.contains(biomes, biome);
 				for(BiomeGenBase b : biomes){
-					p |= (b.equals(biome) || (b.biomeName.equals(biome.biomeName) && b.getClass().getName().equals(biome.getClass().getName())));
+					if(b != null){
+						p |= (b.equals(biome) || (b.biomeName.equals(biome.biomeName) && b.getClass().getName().equals(biome.getClass().getName())));
+					}
 				}
 				if(!p){
 					biomes = ArrayUtils.add(biomes, BiomeGenBase.getBiomeGenArray()[ID]);

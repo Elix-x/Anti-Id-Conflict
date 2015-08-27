@@ -235,7 +235,9 @@ public class PotionsManager {
 			if(potion != null){
 				boolean p = ArrayUtils.contains(potions, potion);
 				for(Potion b : potions){
-					p |= (b.equals(potion) || (b.getName().equals(potion.getName()) && b.getClass().getName().equals(potion.getClass().getName())));
+					if(b != null){
+						p |= (b.equals(potion) || (b.getName().equals(potion.getName()) && b.getClass().getName().equals(potion.getClass().getName())));
+					}
 				}
 				if(!p){
 					potions = ArrayUtils.add(potions, Potion.potionTypes[ID]);
