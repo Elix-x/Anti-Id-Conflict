@@ -26,8 +26,6 @@ public class PotionsManager {
 	public static boolean crashIfConflict;
 	public static boolean debug;
 
-	public static boolean translate;
-
 	public static int freeIds = 0;
 	public static int occupiedIds = 0;
 	public static int IconflictedIds = 0;
@@ -157,7 +155,7 @@ public class PotionsManager {
 						if(!ArrayUtils.isEmpty(conflicts) && conflicts[i] != null){
 							writer.println(conflicts[i].getCrashMessage());
 						} else if(Potion.potionTypes[i] != null){
-							writer.println(i + " is Occupied by " + Potion.potionTypes[i].getName() + " (" + Potion.potionTypes.getClass().getName() + ")");
+							writer.println(i + " is Occupied by " + Potion.potionTypes[i].getName() + " (" + Potion.potionTypes[i].getClass().getName() + ")");
 						} else {
 							writer.println(i + " is Avaible");
 						}
@@ -259,7 +257,7 @@ public class PotionsManager {
 					} else {
 						flag = true;
 					}
-					s += (translate ? I18n.format(potion.getName()) : potion.getName());
+					s += potion.getName();
 					s += " (";
 					s += potion.getClass().getName();
 					s += ")";

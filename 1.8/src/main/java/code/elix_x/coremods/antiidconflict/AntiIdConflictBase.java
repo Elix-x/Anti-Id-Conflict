@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "antiidconflict", name = "Anti Id Conflict", version = "1.3.4")
+@Mod(modid = "antiidconflict", name = "Anti Id Conflict", version = "1.3.5")
 public class AntiIdConflictBase {
 
 	public static File mainFolder;

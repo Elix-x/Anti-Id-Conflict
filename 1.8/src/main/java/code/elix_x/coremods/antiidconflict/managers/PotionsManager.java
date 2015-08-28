@@ -155,7 +155,7 @@ public class PotionsManager {
 						if(!ArrayUtils.isEmpty(conflicts) && conflicts[i] != null){
 							writer.println(conflicts[i].getCrashMessage());
 						} else if(Potion.potionTypes[i] != null){
-							writer.println(i + " is Occupied by " + Potion.potionTypes[i].getName() + " (" + Potion.potionTypes.getClass().getName() + ")");
+							writer.println(i + " is Occupied by " + Potion.potionTypes[i].getName() + " (" + Potion.potionTypes[i].getClass().getName() + ")");
 						} else {
 							writer.println(i + " is Avaible");
 						}
