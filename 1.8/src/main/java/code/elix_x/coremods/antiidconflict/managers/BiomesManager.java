@@ -227,10 +227,23 @@ public class BiomesManager {
 			BiomeGenBase biome = BiomeGenBase.getBiomeGenArray()[ID];
 			if(biome != null){
 				boolean p = ArrayUtils.contains(biomes, biome);
-				for(BiomeGenBase b : biomes){
-					if(b != null){
-						p |= (b.equals(biome) || (b.biomeName.equals(biome.biomeName) && b.getClass().getName().equals(biome.getClass().getName())));
-					}
+				if(!p) {
+					for(BiomeGenBase b : biomes){
+						if(b != null){
+							if(null != b.biomeName && null != biome.biomeName) {
+								p |= (b.equals(biome) || (b.biomeName.equals(biome.biomeName) && b.getClass().getName().equals(biome.getClass().getName())));
+							} else {
+								String message = "Encountered biome without biomeName with biomeID ";
+								if(null == b.biomeName) {	
+									message = message.concat(Integer.toString(b.biomeID));
+								}
+								else {
+									message = message.concat(Integer.toString(biome.biomeID));
+								}
+								System.out.println(message);
+							}
+						}
+					}					
 				}
 				if(!p){
 					biomes = ArrayUtils.add(biomes, BiomeGenBase.getBiomeGenArray()[ID]);
@@ -269,3 +282,6 @@ public class BiomesManager {
 
 	}
 }
+
+
+
